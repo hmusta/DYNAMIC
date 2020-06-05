@@ -1102,8 +1102,8 @@ class spsi<leaf_type, B_LEAF, B>::node {
     // size stored in previous counter
     uint64_t previous_size = (j == 0 ? 0 : subtree_sizes[j - 1]);
 
+    assert(i >= previous_size);
     i = i - previous_size;
-    assert(i >= 0);
     if (this->has_leaves()) {
       assert(this->leaves.size() == nr_children);
       assert(this->can_lose());
@@ -1186,6 +1186,7 @@ class spsi<leaf_type, B_LEAF, B>::node {
 
             assert(x->size() == 2 * B_LEAF);
 
+            assert(j > 0);
             --j;  // update the location of x in this's list of children
             // update removal position to be wrt yx (if y is prev)
             i = i + y->size();
@@ -1203,11 +1204,9 @@ class spsi<leaf_type, B_LEAF, B>::node {
           }
 
           if (y_is_prev) {
-            assert(0 <= j);
             assert(j < this->leaves.size());
             this->leaves.erase(this->leaves.begin() + j);
           } else {
-            assert(0 <= j + 1);
             assert(j + 1 < this->leaves.size());
             this->leaves.erase(this->leaves.begin() + j + 1);
           }
