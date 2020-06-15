@@ -21,8 +21,6 @@
 #ifndef DYNAMICBWT_H_
 #define DYNAMICBWT_H_
 
-#include <algorithm>
-
 #include "includes.hpp"
 
 #include "gap_bitvector.hpp"
@@ -77,8 +75,13 @@ public:
 	 */
 	bwt(vector<pair<char_type,double> >& P){
 
-		assert(std::all_of(P.begin(), P.end(),
-		                   [](auto p) { return p.first != TERMINATOR; }));
+#ifndef NDEBUG
+		for(auto p:P){
+
+			assert(p.first != TERMINATOR);
+
+		}
+#endif
 
 		F = rle_string_type(P);
 		L = dynamic_string_type(P);
