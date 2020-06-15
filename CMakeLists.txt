@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(USE_OPENMP "Enable multi-threading" OFF)
 
@@ -33,8 +35,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include/algorithms/cw-bwt)
 include_directories(${INSTALL_DIR}/src/hopscotch_map/include)
 
 message("Building in ${CMAKE_BUILD_TYPE} mode")
-
-set(CMAKE_CXX_FLAGS "--std=c++11")
 
 if(XXSDS_DYN_MULTI_THREADED)
   find_package(OpenMP REQUIRED)
