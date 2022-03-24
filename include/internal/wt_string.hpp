@@ -130,6 +130,11 @@ class wt_string {
     return root.exists(code) ? root.rank(i, code) : 0;
   }
 
+  pair<uint64_t, char_type> inverse_select(uint64_t i) const {
+      assert(i < size());
+      return root.inverse_select(i);
+  }
+
   bool char_exists(char_type c) const { return ae.char_exists(c); }
 
   void push_back(char_type c) { insert(size(), c); }
@@ -563,6 +568,23 @@ class wt_string<dynamic_bitvector_t>::node {
                          : (B[j] ? child1_->rank(bv.rank1(i), B, j + 1)
                                  : child0_->rank(bv.rank0(i), B, j + 1));
   }
+
+  pair<ulint, char_type> inverse_select(ulint i) const {
+    if (is_leaf()) return make_pair(i, label());
+
+    assert(i < bv.size());
+
+    bool b = bv.at(i);
+
+    assert((b or has_child0()) and (not b or has_child1()));
+
+    if (b) {
+        return child1_->inverse_select(bv.rank1(i));
+    }
+
+    return child0_->inverse_select(bv.rank0(i));
+  }
+
 
   ulint select(ulint i, const vector<bool>& B) const {
     // top-down: find leaf associated with B
